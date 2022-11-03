@@ -18,7 +18,7 @@ password <- "labbcat" ## !!! DON'T COMMIT THE REAL PASSWORD TO GIT !!!
 ### - Participants in a specific corpus: "labels('corpus').includes('QB')"
 ### - Participant with a given gender: "first('participant_gender').label == 'NB'"
 ### - Both: "labels('corpus').includes('QB') && first('participant_gender').label == 'NB'"
-which.participants <- "/AP.*/.test(id)"
+which.participants <- "/AP51.*/.test(id)"
 ### The directory to download the files to
 dir <- "data"
 
