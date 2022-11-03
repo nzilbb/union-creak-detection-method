@@ -10,7 +10,7 @@
 ###
 ### Change these setting to suit you own situation:
 ### LaBB-CAT URL
-url <- "http://localhost:8080/labbcat"
+url <- "http://localhost:8080/labbcat/"
 ### Credentials for logging in to LaBB-CAT
 username <- "labbcat"
 password <- "labbcat" ## !!! DON'T COMMIT THE REAL PASSWORD TO GIT !!!
@@ -18,12 +18,15 @@ password <- "labbcat" ## !!! DON'T COMMIT THE REAL PASSWORD TO GIT !!!
 ### - Participants in a specific corpus: "labels('corpus').includes('QB')"
 ### - Participant with a given gender: "first('participant_gender').label == 'NB'"
 ### - Both: "labels('corpus').includes('QB') && first('participant_gender').label == 'NB'"
-which.participants <- "/AP51.*/.test(id)"
+which.participants <- "/^EG21.*/.test(id)"
 ### The directory to download the files to
 dir <- "data"
 
 devtools::install_github("nzilbb/labbcat-R", "1.2-0")
 library(nzilbb.labbcat)
+
+## Downloading wav files can be time consuming, so up the timeout to 5 minutes
+labbcatTimeout(300)
 
 ## get username/password
 error <- labbcatCredentials(url, username, password)
