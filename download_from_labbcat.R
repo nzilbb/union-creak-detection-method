@@ -22,6 +22,7 @@ which.participants <- "/AP.*/.test(id)"
 ### The directory to download the files to
 dir <- "data"
 
+devtools::install_github("nzilbb/labbcat-R", "1.2-0")
 library(nzilbb.labbcat)
 
 ## get username/password
