@@ -21,13 +21,17 @@ The demo folder contains two example wav files which have been forced aligned (c
 
 ## AM method:
 1. Chunk files into 20s intervals for REAPER (this is for quicker processing). This can be done using the create_chunk_tgs.R script to get TextGrids with boundaries every 20s + remainder. Then the chunk_files.praat script can be used to extract chunked sound files
-2. Run chunked files through REAPER
+2. Run chunked files through REAPER[^1]
 3. Create concatenated and complete Pitch Mark csv files using the create_pm_files.R script in R
 4. Get AM output:
 
     a. **If you are doing an ALL DATA analysis:** Get AM output by running get_am_output_alldata.R script in R
    
     b. **If you are doing a SONORANTS ONLY analysis:** Get AM output by running get_am_output_sonorants.R script in R
+
+[^1]: If you're not using MacREAPER[^2], use the `-a` and `-p` switches, setting the wav file name appended with `.pm` to be the pitch mark file name.
+[^2]: These scripts assume the MacREAPER output format, which has a slightly different header from the REAPER output format. If you're using REAPER, you must convert the header of all .pm files, which you can so with the following shell command
+`sed -i.bak '{ /EST_Header_End/,$!d ; s/EST_Header_End/time voicing f0/ }' *.pm`
 
 ## CD method:
 (You may want to check that CD is measuring H2-H1 for your data - we've had a couple of instances where this has not been the case.)
