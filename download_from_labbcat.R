@@ -18,11 +18,11 @@ password <- "labbcat" ## !!! DON'T COMMIT THE REAL PASSWORD TO GIT !!!
 ### - Participants in a specific corpus: "labels('corpus').includes('QB')"
 ### - Participant with a given gender: "first('participant_gender').label == 'NB'"
 ### - Both: "labels('corpus').includes('QB') && first('participant_gender').label == 'NB'"
-which.participants <- "/^EG21.*/.test(id)"
+which.participants <- "/^AP5.*/.test(id)"
 ### The directory to download the files to
 dir <- "data"
 
-devtools::install_github("nzilbb/labbcat-R", "1.2-0")
+#devtools::install_github("nzilbb/labbcat-R", "1.2-0")
 library(nzilbb.labbcat)
 
 ## Downloading wav files can be time consuming, so up the timeout to 5 minutes
@@ -49,12 +49,23 @@ for (participant.id in participant.ids) {
         wav.file <- getMedia(url, transcript.id, "", "audio/wav", dir)
         
         if (!is.null(wav.file)) { # there is an audio file
+            ## rename wav to convert _ -> -
+            final.wav.file <- file.path(dir, gsub("_", "-", basename(wav.file)))
+            file.rename(from=wav.file, to=final.wav.file)
+
             cat(paste("\n", wav.file, "..."))
             wav.files[[length(wav.files)+1]] <- wav.file
             ## get TextGrid
             textgrid.file <- formatTranscript(
                 url, transcript.id, c("segment"), "text/praat-textgrid", dir)
-            textgrid.files[[length(textgrid.files)+1]] <- textgrid.file
+            ## Rename the TextGrid the way the other scripts like it
+            ## i.e. some_name.TextGrid -> some-name_passage_pipeline.TextGrid
+            final.textgrid.file <- file.path(
+                dir, sub(".TextGrid", "_passage_pipeline.TextGrid",
+                         ## convert _ -> -
+                         gsub("_", "-", basename(textgrid.file))))
+            file.rename(from=textgrid.file, to=final.textgrid.file)
+            textgrid.files[[length(textgrid.files)+1]] <- final.textgrid.file
             
             ## get .pm file
             pm.file <- getMedia(url, transcript.id, "", "application/pm", dir)
@@ -64,7 +75,7 @@ for (participant.id in participant.ids) {
                 ## Replace the header, and also rename the file the way the other scripts like it
                 ## i.e. name.pm -> name.wav.pm
                 
-                final.pm.file <- paste(wav.file, ".pm", sep="")
+                final.pm.file <- paste(final.wav.file, ".pm", sep="")
                 est.header <- TRUE
                 pm <- file(description = pm.file, open="r", blocking = TRUE)
                 repeat {
