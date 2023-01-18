@@ -13,13 +13,28 @@ library(dplyr)
 library(rPraat)
 ###
 
+data <- NULL
 files <- list.files(pattern = "*pipeline.TextGrid")
 phonemes_all <- c()
 for(i in 1:length(files)){
-  temp_data <- tg.read(files[i]) %>%
-    tg.removeTier("ORT-MAU") %>% tg.removeTier("KAN-MAU") %>% tg.removeTier("KAS-MAU") %>% tg.removeTier("MAU") %>% tg.removeTier("MAS") %>% tg.removeTier("TRN") %>% tg.removeTier("creak")
-  temp_data$SON$file <- gsub(".TextGrid", "", files[i])
+  temp_data <- tg.read(files[i]) 
+  ## Maybe the TextGrid isn't from MAUS so ...
   
+  ## ...only remove tiers if they're actually there...
+  try(temp_data <- tg.removeTier(temp_data, "ORT-MAU"), silent = T)
+  try(temp_data <- tg.removeTier(temp_data, "KAN-MAU"), silent = T)
+  try(temp_data <- tg.removeTier(temp_data, "KAS-MAU"), silent = T)
+  try(temp_data <- tg.removeTier(temp_data, "MAU"), silent = T)
+  try(temp_data <- tg.removeTier(temp_data, "MAS"), silent = T)
+  try(temp_data <- tg.removeTier(temp_data, "TRN"), silent = T)
+  try(temp_data <- tg.removeTier(temp_data, "creak"), silent = T)
+  
+  ## ... and rename remaining tier "SON", which is what the script wants below
+  temp_data <- tg.setTierName(temp_data, 1, "SON")
+  
+  try(temp_data <- tg.removeTier(temp_data, "creak"), silent = T)
+  temp_data$SON$file <- gsub(".TextGrid", "", files[i])
+
   phonemes_all <- rbind(phonemes_all, temp_data)
 }
 
