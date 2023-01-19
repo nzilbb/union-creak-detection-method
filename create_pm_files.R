@@ -147,6 +147,10 @@ if (chunked.files) { ## chunked files
         select(speaker, gciTime, voicing, gciDuration, localf0) %>%
         rename(time = gciTime) -> pmData2
     
-    write.csv(pmData2, file = paste0(unique(pmData2$speaker),"_pm.csv"), row.names = F)
-    
+    ### for each speaker
+    for (s in unique(pmData2$speaker)) {
+        ### save the speaker's values to a _pm.csv file
+        write.csv(pmData2[pmData2[, "speaker"] == s,], file = paste0(s,"_pm.csv"), row.names = F)
+    }
+
 }
