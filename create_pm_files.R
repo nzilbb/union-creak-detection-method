@@ -11,7 +11,7 @@ setwd("~/Downloads/demo/")
 ###
 
 ### Were your pm files created from 20s chunks of wav files?
-chunked.files = FALSE
+chunked.files = TRUE
 
 ### load required libraries
 library(dplyr)
