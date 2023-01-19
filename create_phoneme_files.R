@@ -32,7 +32,6 @@ for(i in 1:length(files)){
   ## ... and rename remaining tier "SON", which is what the script wants below
   temp_data <- tg.setTierName(temp_data, 1, "SON")
   
-  try(temp_data <- tg.removeTier(temp_data, "creak"), silent = T)
   temp_data$SON$file <- gsub(".TextGrid", "", files[i])
 
   phonemes_all <- rbind(phonemes_all, temp_data)
