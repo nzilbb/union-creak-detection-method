@@ -54,7 +54,6 @@ dir <- "data"
 
 ################## End of settings to update ##################
 
-devtools::install_github("nzilbb/labbcat-R", "1.2-0")
 library(nzilbb.labbcat)
 library(rPraat)
 
