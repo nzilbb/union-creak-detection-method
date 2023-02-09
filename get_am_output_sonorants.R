@@ -43,6 +43,15 @@ phonemes %>%
            phoneme == "I@" | phoneme == "j" | phoneme == "l" | phoneme == "m" | phoneme == "n" | 
            phoneme == "N" | phoneme == "O" | phoneme == "o:" | phoneme == "oI" | phoneme == "r\\" | 
            phoneme == "U" | phoneme == "u:" | phoneme == "w") -> sonorants
+# e.g. these are the sonorants using the CELEX DISC encoding
+#phonemes %>%
+#  filter(phoneme == "c" | phoneme == "C" | phoneme == "E" | phoneme == "F" | phoneme == "H" | 
+#           phoneme == "i" | phoneme == "I" | phoneme == "P" | phoneme == "q" | phoneme == "Q" | 
+#           phoneme == "u" | phoneme == "U" | phoneme == "V" | phoneme == "0" | phoneme == "1" | 
+#           phoneme == "2" | phoneme == "3" | phoneme == "4" | phoneme == "5" | phoneme == "6" | 
+#           phoneme == "7" | phoneme == "8" | phoneme == "9" | phoneme == "~" | phoneme == "#" | 
+#           phoneme == "{" | phoneme == "$" | phoneme == "@" | phoneme == "j" | phoneme == "l" | 
+#           phoneme == "m" | phoneme == "n" | phoneme == "N" | phoneme == "r" | phoneme == "w") -> sonorants
 
 pm_files1$time <- round(pm_files1$time, digits = 2)
 pm_files1 %>% 
