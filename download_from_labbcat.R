@@ -90,18 +90,18 @@ for (participant.id in participant.ids) {
     for (transcript.id in transcript.ids) {
         cat("\n ", transcript.id, "...", sep = "")
         ## get wav
-        wav.file <- getMedia(url, transcript.id, "", "audio/wav", dir)
+        wav.file.url <- getMediaUrl(url, transcript.id, "", "audio/wav")
         
-        if (!is.null(wav.file)) { # there is an audio file
-            ## rename wav the way other scripts like it
-            final.wav.file <- file.path(
+        if (!is.null(wav.file.url)) { # there is an audio file
+            final.wav.file <- sub(
+                ## rename wav the way other scripts like it
+                "^.*/","", # file name only
                 ## add 'file' number so create_pm_files.R works
-                dir, sub(".wav", "_1.wav",
-                         ## convert _ -> -
-                         gsub("_", "-", basename(wav.file)))) 
-            file.rename(from=wav.file, to=final.wav.file)
+                sub(".wav", "_1.wav",
+                    ## convert _ -> -
+                    gsub("_", "-", wav.file.url))) 
 
-            cat("\n", wav.file, " (", final.wav.file, ")...", sep = "")
+            cat("\n", wav.file.url, " (", final.wav.file, ")...\n", sep = "")
             wav.files[[length(wav.files)+1]] <- final.wav.file
             ## get TextGrid
             textgrid.file <- formatTranscript(
@@ -119,7 +119,7 @@ for (participant.id in participant.ids) {
             ## infer duration from TextGrid
             textgrid <- tg.read(final.textgrid.file)
             duration <- tg.getEndTime(textgrid)
-            write(paste(basename(final.wav.file), duration, sep="\t"),
+            write(paste(final.wav.file, duration, sep="\t"),
                   file=durations.file, append=TRUE)
             
             ## get .pm file
@@ -130,7 +130,7 @@ for (participant.id in participant.ids) {
                 ## Replace the header, and also rename the file the way the other scripts like it
                 ## i.e. name.pm -> name.wav.pm
                 
-                final.pm.file <- paste(final.wav.file, ".pm", sep="")
+                final.pm.file <- file.path(dir, paste(final.wav.file, ".pm", sep=""))
                 est.header <- TRUE
                 pm <- file(description = pm.file, open="r", blocking = TRUE)
                 repeat {
