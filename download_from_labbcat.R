@@ -1,6 +1,6 @@
-### This script downloads selected wav files and TextGrids from a LaBB-CAT corpus, and
-### also creates a corresponding durations.txt file so you don't have to run
-### get_durations.praat
+### This script downloads selected TextGrids and corresponding Reaper .pm files from a 
+### LaBB-CAT corpus, and also creates a corresponding durations.txt file so you don't 
+### have to run get_durations.praat
 ###
 ### Make sure you change the settings below to suit your situation before execution.
 ###
@@ -91,7 +91,8 @@ for (participant.id in participant.ids) {
     cat(participant.id, "...\n", sep = "")
     transcript.ids <- getTranscriptIdsWithParticipant(url, participant.id)
     for (transcript.id in transcript.ids) {
-        if (!is.null(skip.transcripts) && grepl(skip.transcripts, transcript.id, ignore.case = T)) {
+        if (!is.null(skip.transcripts)
+            && grepl(skip.transcripts, transcript.id, ignore.case = T)) {
             cat(" (Skipping ", transcript.id, ")\n", sep = "")
             next
         }
