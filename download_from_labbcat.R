@@ -48,6 +48,9 @@ password <- "labbcat" ## !!! DON'T COMMIT THE REAL PASSWORD TO GIT !!!
 which.participants <- "/^AP51[13].*/.test(id)"
 ## (^AP51[12].* identifies just a couple of participants for testing purposes)
 
+### A regular expression matching the IDs of transcripts you want to skip, e.g. "qb2"
+skip.transcripts <- NULL
+
 ### The directory to download the files to
 ### NB: this script deletes everything in here before doing anything else
 dir <- "data"
@@ -85,10 +88,14 @@ if (file.exists(durations.file)) {
 
 # for each participant
 for (participant.id in participant.ids) {
-    cat("\n", participant.id, "...", sep = "")
+    cat(participant.id, "...\n", sep = "")
     transcript.ids <- getTranscriptIdsWithParticipant(url, participant.id)
     for (transcript.id in transcript.ids) {
-        cat("\n ", transcript.id, "...", sep = "")
+        if (!is.null(skip.transcripts) && grepl(skip.transcripts, transcript.id, ignore.case = T)) {
+            cat(" (Skipping ", transcript.id, ")\n", sep = "")
+            next
+        }
+        cat(" ", transcript.id, "...\n", sep = "")
         ## get wav
         wav.file.url <- getMediaUrl(url, transcript.id, "", "audio/wav")
         
@@ -101,7 +108,7 @@ for (participant.id in participant.ids) {
                     ## convert _ -> -
                     gsub("_", "-", wav.file.url))) 
 
-            cat("\n", wav.file.url, " (", final.wav.file, ")...\n", sep = "")
+            cat("  ", wav.file.url, " (", final.wav.file, ")...\n", sep = "")
             wav.files[[length(wav.files)+1]] <- final.wav.file
             ## get TextGrid
             textgrid.file <- formatTranscript(
@@ -155,4 +162,4 @@ for (participant.id in participant.ids) {
     } # next transcript
 } # next participant
 
-cat("\nFinished.", length(wav.files)+length(textgrid.files)+length(pm.files), "data files are in:", dir, "\n")
+cat("Finished.", length(wav.files)+length(textgrid.files)+length(pm.files), "data files are in:", dir, "\n")
